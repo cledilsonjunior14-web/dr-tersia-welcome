@@ -182,9 +182,9 @@ function LinkCard({
   description: string;
 }) {
   return (
-    <div className="group flex items-center gap-4 rounded-2xl border border-sand/70 bg-card px-4 py-4 text-left shadow-sm transition-all duration-200 hover:border-wine/30 hover:shadow-editorial">
+    <div className="group flex items-center gap-4 border border-sand/70 bg-card px-4 py-4 text-left shadow-sm transition-all duration-200 hover:border-wine/30 hover:shadow-editorial">
       {/* ícone */}
-      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-sand/60 bg-background text-wine transition-colors group-hover:border-wine/30 group-hover:bg-cream/80">
+      <div className="flex h-11 w-11 shrink-0 items-center justify-center border border-sand/60 bg-background text-wine transition-colors group-hover:border-wine/30 group-hover:bg-cream/80">
         {icon}
       </div>
 
@@ -193,7 +193,7 @@ function LinkCard({
         <p className="font-display text-[10.5px] font-bold tracking-[0.12em] text-wine-deep">
           {title}
         </p>
-        <p className="mt-0.5 text-[11px] leading-snug text-muted-foreground">
+        <p className="mt-0.5 text-[11px] leading-snug text-foreground/55">
           {description}
         </p>
       </div>
