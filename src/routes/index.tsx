@@ -1,6 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { QualificationFlow } from "@/components/QualificationFlow";
+import { ExitIntentBanner } from "@/components/ExitIntentBanner";
+import { useExitIntent } from "@/hooks/useExitIntent";
 import { RETURNING_PATIENT_MESSAGE, whatsappUrl } from "@/lib/lead";
 import retrato from "@/assets/dra-tersia.jpg";
 import {
@@ -32,6 +34,14 @@ export const Route = createFileRoute("/")({
 
 function Index() {
   const [open, setOpen] = useState(false);
+
+  // Exit intent — desativado quando o quiz está aberto
+  const exitIntent = useExitIntent(open);
+
+  function handleExitSchedule() {
+    exitIntent.dismiss();
+    setOpen(true);
+  }
 
   return (
     <main className="min-h-screen bg-background">
@@ -165,6 +175,13 @@ function Index() {
       </div>
 
       {open && <QualificationFlow onClose={() => setOpen(false)} />}
+
+      {exitIntent.show && !open && (
+        <ExitIntentBanner
+          onSchedule={handleExitSchedule}
+          onDismiss={exitIntent.dismiss}
+        />
+      )}
     </main>
   );
 }
