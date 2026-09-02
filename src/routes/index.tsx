@@ -8,7 +8,6 @@ import {
   ChevronRight,
   MapPin,
   MessageCircle,
-  Instagram,
 } from "lucide-react";
 
 const TITLE = "Dra. Térsia Guimarães — Ginecologia e Saúde Íntima em Sobral";
@@ -66,55 +65,48 @@ function Index() {
             >
               Térsia Guimarães
             </h1>
+
+            {/* Especialidades linha 1 */}
             <div className="mt-2 flex items-center justify-center gap-2">
-              <span className="h-px w-5 bg-wine/25" />
-              <p className="eyebrow text-[9px] font-semibold tracking-[0.2em] text-wine">
-                Ginecologia &amp; Obstetrícia
+              <span className="h-px w-4 bg-wine/25" />
+              <p className="eyebrow text-[8.5px] font-semibold tracking-[0.16em] text-wine">
+                Ginecologia • Obstetrícia • Medicina Fetal
               </p>
-              <span className="h-px w-5 bg-wine/25" />
+              <span className="h-px w-4 bg-wine/25" />
             </div>
 
-            <p className="mt-4 max-w-[270px] text-[12px] leading-relaxed text-foreground/60">
-              Cuidando da sua saúde com atenção e dedicação individual.
+            {/* Especialidades linha 2 */}
+            <p className="mt-1 text-[9px] tracking-[0.08em] text-wine-deep/55">
+              Estética Íntima&nbsp;|&nbsp;Ninfoplastia • Laser Íntimo
             </p>
 
-            {/* Ícones sociais */}
-            <div className="mt-5 flex items-center justify-center gap-5">
-              <a
-                href={INSTAGRAM_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Instagram"
-                className="text-wine/45 transition-colors hover:text-wine"
-              >
-                <Instagram size={16} strokeWidth={1.8} />
-              </a>
-              <a
-                href={whatsappUrl(WHATSAPP_MESSAGE)}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="WhatsApp"
-                className="text-wine/45 transition-colors hover:text-wine"
-              >
-                <MessageCircle size={16} strokeWidth={1.8} />
-              </a>
-              <a
-                href={GOOGLE_MAPS_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Localização"
-                className="text-wine/45 transition-colors hover:text-wine"
-              >
-                <MapPin size={16} strokeWidth={1.8} />
-              </a>
-            </div>
+            {/* CRM / RQE */}
+            <p className="mt-2 text-[8px] tracking-[0.06em] text-foreground/35">
+              CRM-CE 13957&nbsp;|&nbsp;RQE 12129&nbsp;|&nbsp;RQE 8882
+            </p>
           </div>
+        </div>
+
+        {/* ══════════════════════════════
+            CHAMADA PARA AÇÃO
+        ══════════════════════════════ */}
+        <div className="animate-fade-up delay-300 px-6 pb-1 pt-6 text-center">
+          <h2
+            className="font-display font-bold leading-snug text-wine-deep"
+            style={{ fontSize: "1.25rem" }}
+          >
+            Sua saúde merece<br />
+            <span className="text-wine">atenção especializada.</span>
+          </h2>
+          <p className="mt-2 text-[12px] leading-relaxed text-foreground/55">
+            Escolha como podemos te atender hoje.
+          </p>
         </div>
 
         {/* ══════════════════════════════
             CARDS DE AÇÃO
         ══════════════════════════════ */}
-        <div className="animate-fade-up delay-300 flex flex-col gap-3 px-5 py-5">
+        <div className="animate-fade-up delay-400 flex flex-col gap-3 px-5 py-4">
 
           {/* Agendar primeira consulta */}
           <button
@@ -161,47 +153,12 @@ function Index() {
         {/* ══════════════════════════════
             RODAPÉ
         ══════════════════════════════ */}
-        <footer className="animate-fade-up delay-400 mt-auto px-5 pb-8 pt-4 text-center">
-          <p
-            className="eyebrow mb-4 text-wine-deep/40"
-            style={{ fontSize: "0.6rem", letterSpacing: "0.25em" }}
-          >
-            Conecte-se
-          </p>
-
-          {/* linha decorativa */}
-          <div className="mb-4 flex items-center gap-2">
+        <footer className="animate-fade-up delay-500 mt-auto px-5 pb-8 pt-6 text-center">
+          <div className="flex items-center gap-2">
             <span className="h-px flex-1 bg-wine-deep/10" />
-            <div className="flex gap-4">
-              <a
-                href={INSTAGRAM_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-wine/40 transition-colors hover:text-wine"
-              >
-                <Instagram size={15} strokeWidth={1.8} />
-              </a>
-              <a
-                href={whatsappUrl(WHATSAPP_MESSAGE)}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-wine/40 transition-colors hover:text-wine"
-              >
-                <MessageCircle size={15} strokeWidth={1.8} />
-              </a>
-              <a
-                href={GOOGLE_MAPS_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-wine/40 transition-colors hover:text-wine"
-              >
-                <MapPin size={15} strokeWidth={1.8} />
-              </a>
-            </div>
-            <span className="h-px flex-1 bg-wine-deep/10" />
+            <span className="h-px w-4 bg-wine-deep/10" />
           </div>
-
-          <p className="text-[8px] tracking-wide text-wine-deep/30">
+          <p className="mt-4 text-[8px] tracking-wide text-wine-deep/30">
             © 2026 Dra. Térsia Guimarães · Todos os direitos reservados.
           </p>
         </footer>
