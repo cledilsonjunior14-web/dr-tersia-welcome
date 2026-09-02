@@ -39,86 +39,73 @@ function Index() {
       <div className="mx-auto flex min-h-screen w-full max-w-[420px] flex-col">
 
         {/* ══════════════════════════════
-            HERO — foto esquerda + branding direita
+            HERO — foto circular + branding centralizado
         ══════════════════════════════ */}
-        <div className="animate-fade-in delay-100 relative flex" style={{ minHeight: "52vw", maxHeight: "280px" }}>
+        <div className="flex flex-col items-center px-6 pb-2 pt-12 text-center">
 
-          {/* Foto — sangra na esquerda */}
-          <div className="relative w-[44%] shrink-0 overflow-hidden">
+          {/* Foto circular com anel pulsante */}
+          <div className="animate-fade-up delay-100 relative mb-6">
+            <div className="absolute -inset-3 animate-pulse rounded-full border border-wine/25" />
+            <div className="absolute -inset-1 rounded-full border border-sand/60" />
             <img
               src={retrato}
               alt="Dra. Térsia Guimarães, ginecologista e obstetra em Sobral"
-              className="h-full w-full object-cover"
-              style={{ objectPosition: "38% 8%" }}
-            />
-            {/* fade direito para fundir com o fundo */}
-            <div
-              className="pointer-events-none absolute inset-y-0 right-0 w-10"
-              style={{
-                background:
-                  "linear-gradient(to right, transparent, oklch(0.960 0.010 58))",
-              }}
+              width={148}
+              height={148}
+              className="relative z-10 h-[148px] w-[148px] rounded-full border-4 border-cream object-cover shadow-editorial"
+              style={{ objectPosition: "50% 10%" }}
             />
           </div>
 
-          {/* Branding — direita */}
-          <div className="animate-fade-up delay-200 flex flex-1 flex-col items-center justify-center px-4 py-6 text-center">
-            {/* monograma */}
-            <div className="mb-3 flex h-[52px] w-[52px] items-center justify-center rounded-full border border-wine/40 bg-cream/60">
-              <span
-                className="font-display text-lg font-bold text-wine"
-                style={{ letterSpacing: "0.04em" }}
-              >
-                TG
-              </span>
-            </div>
-
+          {/* Branding */}
+          <div className="animate-fade-up delay-200">
             <p className="eyebrow text-[8px] tracking-[0.28em] text-wine/60">Dra.</p>
             <h1
-              className="font-display font-bold leading-[1.1] text-wine-deep"
-              style={{ fontSize: "1.2rem", letterSpacing: "0.02em" }}
+              className="font-display font-bold leading-[1.15] text-wine-deep"
+              style={{ fontSize: "1.45rem", letterSpacing: "0.02em" }}
             >
-              Térsia<br />Guimarães
+              Térsia Guimarães
             </h1>
-            <p
-              className="eyebrow mt-1 text-wine/50"
-              style={{ fontSize: "0.55rem", letterSpacing: "0.2em" }}
-            >
-              Ginecologia &amp; Obstetrícia
-            </p>
+            <div className="mt-2 flex items-center justify-center gap-2">
+              <span className="h-px w-5 bg-wine/25" />
+              <p className="eyebrow text-[9px] font-semibold tracking-[0.2em] text-wine">
+                Ginecologia &amp; Obstetrícia
+              </p>
+              <span className="h-px w-5 bg-wine/25" />
+            </div>
 
-            <p className="mt-3 text-[10.5px] leading-relaxed text-foreground/60">
+            <p className="mt-4 max-w-[270px] text-[12px] leading-relaxed text-foreground/60">
               Cuidando da sua saúde com atenção e dedicação individual.
             </p>
 
             {/* Ícones sociais */}
-            <div className="mt-4 flex items-center gap-4">
+            <div className="mt-5 flex items-center justify-center gap-5">
               <a
                 href={INSTAGRAM_URL}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Instagram"
-                className="text-wine/50 transition-colors hover:text-wine"
+                className="text-wine/45 transition-colors hover:text-wine"
               >
-                <Instagram size={15} strokeWidth={1.8} />
+                <Instagram size={16} strokeWidth={1.8} />
               </a>
               <a
                 href={whatsappUrl(WHATSAPP_MESSAGE)}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="WhatsApp"
-                className="text-wine/50 transition-colors hover:text-wine"
+                className="text-wine/45 transition-colors hover:text-wine"
               >
-                <MessageCircle size={15} strokeWidth={1.8} />
+                <MessageCircle size={16} strokeWidth={1.8} />
               </a>
               <a
                 href={GOOGLE_MAPS_URL}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Localização"
-                className="text-wine/50 transition-colors hover:text-wine"
+                className="text-wine/45 transition-colors hover:text-wine"
               >
-                <MapPin size={15} strokeWidth={1.8} />
+                <MapPin size={16} strokeWidth={1.8} />
               </a>
             </div>
           </div>
