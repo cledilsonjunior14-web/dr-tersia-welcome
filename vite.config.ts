@@ -17,6 +17,5 @@ export default defineConfig({
     // nitro/vite builds from this
     server: { entry: "server" },
     router: { basepath: BASE_PATH },
-    serverFns: { base: `${BASE_PATH}/_serverFn` },
   },
 });
