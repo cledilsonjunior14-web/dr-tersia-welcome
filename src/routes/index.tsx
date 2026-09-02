@@ -25,54 +25,58 @@ function Index() {
 
   return (
     <main className="min-h-screen bg-background">
-      <div className="mx-auto flex min-h-screen w-full max-w-md flex-col px-6 pb-10 pt-12 sm:max-w-lg">
-        <header className="text-center">
-          <h1 className="font-display text-[1.75rem] leading-none tracking-[0.06em] text-wine-deep uppercase sm:text-3xl">
-            Dra. Térsia Guimarães
-          </h1>
-          <p className="eyebrow mt-3 text-muted-foreground">
-            Ginecologia • Obstetrícia • Saúde íntima
-          </p>
-        </header>
-
-        <div className="relative mt-9 overflow-hidden">
+      <div className="mx-auto flex min-h-screen w-full max-w-[380px] flex-col items-center px-6 pb-10 pt-14 text-center">
+        <div className="relative mb-10">
+          <div className="absolute -inset-2 animate-pulse rounded-full border border-sand" />
           <img
             src={retrato}
             alt="Retrato da Dra. Térsia Guimarães, ginecologista e obstetra em Sobral"
-            width={1024}
-            height={1280}
-            className="aspect-[4/5] w-full object-cover object-top"
+            width={140}
+            height={140}
+            className="relative z-10 h-[140px] w-[140px] rounded-full border-4 border-cream object-cover object-top shadow-editorial"
           />
-          <div className="pointer-events-none absolute inset-0 border border-sand/70" />
         </div>
 
-        <p className="mt-10 text-center font-display text-2xl leading-snug text-foreground sm:text-[1.75rem]">
+        <header className="mb-12 space-y-3">
+          <h1 className="font-display text-2xl font-bold uppercase tracking-[0.05em] text-wine-deep">
+            Dra. Térsia Guimarães
+          </h1>
+          <div className="flex items-center justify-center gap-3">
+            <span className="h-px w-6 bg-wine/30" />
+            <p className="eyebrow font-semibold text-wine">
+              Ginecologia & Obstetrícia
+            </p>
+            <span className="h-px w-6 bg-wine/30" />
+          </div>
+        </header>
+
+        <p className="mb-12 max-w-[320px] text-[15px] leading-relaxed text-foreground/80 italic">
           Cuidar da sua saúde começa entendendo o que você precisa.
         </p>
 
-        <div className="mt-10 flex flex-col gap-3">
+        <div className="flex w-full flex-col gap-4">
           <button
             onClick={() => setOpen(true)}
-            className="w-full bg-wine px-6 py-5 text-sm font-medium tracking-[0.04em] text-primary-foreground transition-colors hover:bg-wine-deep"
+            className="w-full bg-wine px-8 py-5 font-display text-xs font-bold tracking-[0.15em] text-primary-foreground shadow-editorial transition-all duration-300 hover:-translate-y-0.5 hover:bg-wine-deep"
           >
-            Quero agendar minha primeira consulta
+            AGENDAR PRIMEIRA CONSULTA
           </button>
 
           <a
             href={whatsappUrl(RETURNING_PATIENT_MESSAGE)}
             target="_blank"
             rel="noopener noreferrer"
-            className="w-full border border-wine-deep/30 px-6 py-4 text-center text-sm tracking-[0.04em] text-wine-deep transition-colors hover:bg-secondary/60"
+            className="w-full border border-wine-deep/20 px-8 py-5 font-display text-xs font-bold tracking-[0.15em] text-wine-deep transition-all duration-300 hover:border-wine-deep hover:bg-cream/60"
           >
-            Já sou paciente
+            JÁ SOU PACIENTE
           </a>
         </div>
 
-        <footer className="mt-auto pt-14 text-center">
-          <p className="text-[0.7rem] leading-relaxed tracking-[0.12em] text-muted-foreground uppercase">
+        <footer className="mt-auto pt-16">
+          <p className="text-[9px] uppercase tracking-[0.3em] text-wine-deep/40">
             Ginecologia • Obstetrícia • Medicina Fetal • Saúde Íntima
           </p>
-          <p className="mt-2 text-[0.7rem] tracking-[0.12em] text-muted-foreground uppercase">
+          <p className="mt-2 text-[9px] uppercase tracking-[0.3em] text-wine-deep/40">
             Atendimento particular em Sobral — CE
           </p>
         </footer>
