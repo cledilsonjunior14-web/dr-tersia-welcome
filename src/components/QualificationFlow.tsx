@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { X, ArrowLeft, ArrowRight, CheckCircle2 } from "lucide-react";
+import { trackLead } from "@/lib/pixel";
 import {
   buildLeadMessage,
   formatPhone,
@@ -313,6 +314,12 @@ export function QualificationFlow({ onClose }: { onClose: () => void }) {
                 href={whatsappUrl(finalMessage)}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() =>
+                  trackLead({
+                    ...(lead.trilha ? { trilha: lead.trilha } : {}),
+                    ...(lead.interesse ? { interesse: lead.interesse } : {}),
+                  })
+                }
                 className="group flex w-full items-center justify-center gap-2 bg-wine px-6 py-4 font-display text-[11px] font-bold tracking-[0.16em] text-primary-foreground transition-all duration-200 hover:bg-wine-deep"
               >
                 CONTINUAR NO WHATSAPP
