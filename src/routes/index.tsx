@@ -8,7 +8,7 @@ import retrato from "@/assets/dra-tersia.jpg";
 
 const TITLE = "Dra. Térsia Guimarães — Ginecologia e Saúde Íntima em Sobral";
 const DESCRIPTION =
-  "Agende sua primeira consulta com a Dra. Térsia Guimarães. Ginecologia, obstetrícia, medicina fetal e saúde íntima. Atendimento particular em Sobral — CE.";
+  "Agende sua primeira consulta com a Dra. Térsia Guimarães. Ginecologia, obstetrícia, medicina fetal e saúde íntima. Atendimento particular em Sobral e Camocim — CE.";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -63,6 +63,12 @@ function Index() {
           <p className="mt-2 text-[11px] tracking-[0.04em] text-foreground/45">
             CRM-CE 13957&nbsp;|&nbsp;RQE 12129&nbsp;|&nbsp;RQE 8882
           </p>
+
+          <p className="mt-4 inline-flex items-center gap-2 rounded-full border border-wine/30 bg-wine/5 px-4 py-2 text-[12px] font-bold uppercase tracking-[0.1em] text-wine">
+            Atendimento particular
+            <span className="h-3 w-px bg-wine/30" />
+            <span className="font-semibold normal-case tracking-[0.02em] text-wine-deep">Sobral e Camocim — CE</span>
+          </p>
         </header>
 
         {/* ── Chamada ── */}
@@ -97,11 +103,14 @@ function Index() {
           >
             Já sou paciente
           </a>
+          <p className="text-center text-[12.5px] leading-[1.6] text-foreground/55">
+            Consultas e procedimentos são particulares. Não atendemos por plano de saúde ou convênio.
+          </p>
         </div>
 
         {/* ── Rodapé ── */}
         <footer className="animate-fade-up delay-500 mt-[22px] border-t border-sand pt-4 text-center text-[11.5px] leading-[1.7] text-foreground/60">
-          Atendimento particular em Sobral — CE
+          Atendimento particular em Sobral — CE e Camocim — CE
         </footer>
       </div>
 
