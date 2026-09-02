@@ -6,10 +6,17 @@
 // You can pass additional config via defineConfig({ vite: { ... }, etc... }) if needed.
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
+// A página é publicada em aibdigitall.com/dratercialink (prefixo), por isso o base path.
+export const BASE_PATH = "/dratercialink";
+
 export default defineConfig({
+  vite: { base: `${BASE_PATH}/` },
+  nitro: { baseURL: `${BASE_PATH}/` },
   tanstackStart: {
     // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
     // nitro/vite builds from this
     server: { entry: "server" },
+    router: { basepath: BASE_PATH },
+    serverFns: { base: `${BASE_PATH}/_serverFn` },
   },
 });

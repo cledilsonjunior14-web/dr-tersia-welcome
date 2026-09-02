@@ -7,6 +7,7 @@ export const getRouter = () => {
 
   const router = createRouter({
     routeTree,
+    basepath: "/dratercialink",
     context: { queryClient },
     scrollRestoration: true,
     defaultPreloadStaleTime: 0,
