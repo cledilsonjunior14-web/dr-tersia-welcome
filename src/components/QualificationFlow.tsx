@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
-import { X, ArrowLeft, ArrowRight, CheckCircle2 } from "lucide-react";
-import { trackLead } from "@/lib/pixel";
+import { X } from "lucide-react";
+import { getFbCookies, newEventId, setAdvancedMatching, trackLead } from "@/lib/pixel";
+import { sendLeadToCapi } from "@/lib/capi";
 import {
   buildLeadMessage,
   formatPhone,
@@ -66,20 +67,17 @@ const CONTEXT: Record<Track, { question: string; options: string[] }> = {
     ],
   },
   outro: {
-    question: "Como podemos te ajudar melhor?",
+    question: "Como podemos te orientar melhor?",
     options: [
-      "Tirar uma dúvida",
-      "Segunda opinião",
-      "Retorno de exame",
-      "Prefiro explicar no WhatsApp",
+      "Quero marcar uma avaliação",
+      "Tenho uma dúvida sobre um atendimento",
+      "Quero falar com a equipe",
     ],
   },
 };
 
-const TOTAL_STEPS = 5;
 type Step = 0 | 1 | 2 | 3 | 4;
 
-const STEP_LABELS = ["Nome", "Contato", "Motivo", "Interesse", "Conclusão"];
 
 export function QualificationFlow({ onClose }: { onClose: () => void }) {
   const [step, setStep] = useState<Step>(0);
@@ -89,7 +87,6 @@ export function QualificationFlow({ onClose }: { onClose: () => void }) {
   const [interesse, setInteresse] = useState<string | null>(null);
   const [lead, setLead] = useState<Lead | null>(null);
 
-  const progresso = ((step + 1) / TOTAL_STEPS) * 100;
   const finalMessage = useMemo(() => (lead ? buildLeadMessage(lead) : ""), [lead]);
 
   function criarLead() {
@@ -109,6 +106,7 @@ export function QualificationFlow({ onClose }: { onClose: () => void }) {
     };
     setLead(novo);
     saveLead(novo);
+    setAdvancedMatching({ phone: "55" + novo.telefone, firstName: novo.nome });
     setStep(2);
   }
 
@@ -144,141 +142,123 @@ export function QualificationFlow({ onClose }: { onClose: () => void }) {
     setStep(4);
   }
 
+  const passos = 4; // etapas com pergunta; a tela final não conta
+  const atual = Math.min(step + 1, passos);
+  const progresso = (atual / passos) * 100;
+
   return (
     <div
-      className="fixed inset-0 z-50 flex items-end justify-center bg-wine-deep/55 backdrop-blur-[3px] sm:items-center sm:p-8"
+      role="dialog"
+      aria-modal="true"
+      className="fixed inset-0 z-50 flex items-end justify-center bg-foreground/55 sm:items-center sm:p-6"
       onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
     >
       <div
-        className="animate-fade-up relative flex w-full max-w-lg flex-col bg-background"
-        style={{ maxHeight: "96dvh", boxShadow: "0 32px 80px -20px oklch(0.309 0.062 22 / 0.55)" }}
+        className="animate-fade-up relative flex w-full max-w-[460px] flex-col rounded-t-[26px] bg-card sm:rounded-[22px]"
+        style={{ maxHeight: "94dvh" }}
       >
-
-        {/* ── Barra de progresso topo ── */}
-        <div className="h-[3px] w-full bg-sand/50 shrink-0">
-          <div
-            className="h-[3px] bg-wine transition-all duration-500 ease-out"
-            style={{ width: `${progresso}%` }}
-          />
-        </div>
-
-        {/* ── Cabeçalho ── */}
-        <div className="flex shrink-0 items-center justify-between border-b border-sand/60 px-6 py-4">
-          {/* Steps lineares */}
-          <div className="flex items-center gap-1">
-            {STEP_LABELS.map((label, i) => (
-              <div key={i} className="flex items-center gap-1">
-                <span
-                  className="text-[9px] font-semibold uppercase tracking-[0.18em] transition-colors duration-200"
-                  style={{
-                    color:
-                      i < step
-                        ? "oklch(0.446 0.135 26 / 0.5)"
-                        : i === step
-                        ? "oklch(0.446 0.135 26)"
-                        : "oklch(0.851 0.021 55)",
-                  }}
-                >
-                  {label}
-                </span>
-                {i < STEP_LABELS.length - 1 && (
-                  <span className="text-[9px] text-sand/80 mx-0.5">·</span>
-                )}
-              </div>
-            ))}
+        {/* ── Topo: progresso + fechar ── */}
+        <div className="flex shrink-0 items-center gap-3.5 px-5 pt-4">
+          <div className="h-[2px] flex-1 overflow-hidden rounded-full bg-muted">
+            <div
+              className="h-full bg-wine transition-all duration-300"
+              style={{ width: `${progresso}%` }}
+            />
           </div>
-
-          {/* Fechar */}
+          {step < 4 && (
+            <span className="text-[12px] font-semibold tracking-[0.04em] text-foreground/60">
+              {atual} de {passos}
+            </span>
+          )}
           <button
             onClick={onClose}
             aria-label="Fechar"
-            className="ml-3 shrink-0 text-foreground/40 transition-colors hover:text-foreground"
+            className="grid h-[34px] w-[34px] place-items-center rounded-full border border-sand bg-card text-wine-deep transition-colors hover:border-wine-deep"
           >
-            <X size={17} strokeWidth={1.8} />
+            <X size={16} strokeWidth={1.8} />
           </button>
         </div>
 
         {/* ── Conteúdo ── */}
-        <div className="flex-1 overflow-y-auto px-6 py-8 sm:px-10">
+        <div className="flex-1 overflow-y-auto px-[22px] pb-[26px] pt-[22px]">
 
           {/* ETAPA 0 — Nome */}
           {step === 0 && (
             <Seção
-              eyebrow="Primeira consulta"
-              title="Vamos entender como podemos te atender."
-              subtitle="São só algumas informações rápidas."
+              title="Olá! Como podemos te chamar?"
+              subtitle="São só algumas informações rápidas para entendermos como te atender."
             >
-              <label className="mt-8 block text-[10px] font-semibold uppercase tracking-[0.18em] text-foreground/50">
-                Como podemos te chamar?
-              </label>
               <input
                 autoFocus
                 value={nome}
                 onChange={(e) => setNome(e.target.value)}
                 onKeyDown={(e) => { if (e.key === "Enter" && nome.trim().length > 1) setStep(1); }}
                 placeholder="Seu primeiro nome"
-                className="mt-3 w-full border-b-2 border-sand bg-transparent pb-2 font-display text-[1.6rem] font-bold text-foreground outline-none transition-colors placeholder:font-normal placeholder:text-foreground/25 focus:border-wine"
+                autoComplete="given-name"
+                aria-label="Seu primeiro nome"
+                className={campo}
               />
-              <BotãoPrimário disabled={nome.trim().length < 2} onClick={() => setStep(1)}>
-                Continuar
-              </BotãoPrimário>
+              <Nav>
+                <BotãoPrimário disabled={nome.trim().length < 2} onClick={() => setStep(1)} />
+              </Nav>
             </Seção>
           )}
 
           {/* ETAPA 1 — Telefone */}
           {step === 1 && (
             <Seção
-              eyebrow={`Olá, ${nome.trim()}`}
-              title="Qual é o seu WhatsApp?"
-              subtitle="Usamos apenas para dar seguimento ao seu atendimento."
+              title="Pra qual número podemos continuar seu atendimento?"
+              subtitle="Usamos o WhatsApp para dar sequência à sua consulta."
             >
-              <label className="mt-8 block text-[10px] font-semibold uppercase tracking-[0.18em] text-foreground/50">
-                Número com DDD
-              </label>
               <input
                 autoFocus
                 inputMode="tel"
+                autoComplete="tel"
                 value={telefone}
                 onChange={(e) => setTelefone(formatPhone(e.target.value))}
                 onKeyDown={(e) => { if (e.key === "Enter" && isValidPhone(telefone)) criarLead(); }}
                 placeholder="(88) 99999-9999"
-                className="mt-3 w-full border-b-2 border-sand bg-transparent pb-2 font-display text-[1.6rem] font-bold text-foreground outline-none transition-colors placeholder:font-normal placeholder:text-foreground/25 focus:border-wine"
+                aria-label="Seu WhatsApp com DDD"
+                className={campo}
               />
-              <BotãoPrimário disabled={!isValidPhone(telefone)} onClick={criarLead}>
-                Continuar
-              </BotãoPrimário>
-              <BotãoVoltar onClick={() => setStep(0)} />
+              <Nav>
+                <BotãoVoltar onClick={() => setStep(0)} />
+                <BotãoPrimário disabled={!isValidPhone(telefone)} onClick={criarLead} />
+              </Nav>
             </Seção>
           )}
 
           {/* ETAPA 2 — Motivo */}
           {step === 2 && (
             <Seção
-              eyebrow="Sobre você"
               title="O que fez você procurar a Dra. Térsia hoje?"
-              subtitle="Escolha a opção mais próxima."
+              subtitle="Não precisa saber o nome de nenhum procedimento."
             >
-              <div className="mt-6 flex flex-col gap-2">
+              <div className="grid gap-2.5">
                 {TRACKS.map((t) => (
-                  <CartãoOpção
+                  <Opção
                     key={t.id}
                     label={t.label}
-                    description={t.description}
                     selected={track === t.id}
                     onClick={() => escolherTrilha(t.id)}
                   />
                 ))}
               </div>
-              <BotãoVoltar onClick={() => setStep(1)} />
+              <Nav>
+                <BotãoVoltar onClick={() => setStep(1)} />
+              </Nav>
             </Seção>
           )}
 
           {/* ETAPA 3 — Interesse contextual */}
           {step === 3 && track && (
-            <Seção eyebrow="Quase lá" title={CONTEXT[track].question}>
-              <div className="mt-6 flex flex-col gap-2">
+            <Seção
+              title={CONTEXT[track].question}
+              subtitle="Escolha a opção mais próxima. A equipe ajusta com você depois."
+            >
+              <div className="grid gap-2.5">
                 {CONTEXT[track].options.map((op) => (
-                  <CartãoOpção
+                  <Opção
                     key={op}
                     label={op}
                     selected={interesse === op}
@@ -286,61 +266,52 @@ export function QualificationFlow({ onClose }: { onClose: () => void }) {
                   />
                 ))}
               </div>
-              <BotãoVoltar onClick={() => setStep(2)} />
+              <Nav>
+                <BotãoVoltar onClick={() => setStep(2)} />
+              </Nav>
             </Seção>
           )}
 
-          {/* ETAPA 4 — Tela final */}
+          {/* ETAPA 4 — Final */}
           {step === 4 && lead && (
-            <div className="flex flex-col items-center py-4 text-center">
-              <div
-                className="mb-6 flex h-14 w-14 items-center justify-center border border-wine/30"
-                style={{ background: "oklch(0.985 0.005 75)" }}
-              >
-                <CheckCircle2 size={28} strokeWidth={1.4} className="text-wine" />
-              </div>
-
-              <p className="eyebrow text-wine">Tudo certo</p>
-              <h2 className="mt-2 font-display text-2xl font-bold leading-snug text-wine-deep sm:text-3xl">
-                {lead.nome}, suas informações<br />foram registradas.
+            <div>
+              <h2 className="font-display text-[30px] font-normal leading-[1.15] tracking-[-0.015em] text-wine-deep">
+                Tudo certo, {lead.nome}.
               </h2>
-              <p className="mt-3 max-w-xs text-[13px] leading-relaxed text-foreground/60">
-                Agora vamos continuar seu atendimento pelo WhatsApp com uma mensagem já preparada para você.
+              <p className="mb-[26px] mt-2 text-[15.5px] leading-[1.55] text-foreground">
+                Já registramos suas informações. Agora vamos continuar seu atendimento pelo WhatsApp.
               </p>
-
-              <div className="my-7 h-px w-full bg-sand/60" />
-
               <a
                 href={whatsappUrl(finalMessage)}
                 target="_blank"
                 rel="noopener noreferrer"
-                onClick={() =>
-                  trackLead({
+                onClick={() => {
+                  const eventId = newEventId();
+                  const params = {
                     ...(lead.trilha ? { trilha: lead.trilha } : {}),
                     ...(lead.interesse ? { interesse: lead.interesse } : {}),
-                  })
-                }
-                className="group flex w-full items-center justify-center gap-2 bg-wine px-6 py-4 font-display text-[11px] font-bold tracking-[0.16em] text-primary-foreground transition-all duration-200 hover:bg-wine-deep"
+                  };
+                  trackLead(params, eventId);
+                  sendLeadToCapi({
+                    data: {
+                      eventId,
+                      eventSourceUrl: window.location.href,
+                      phone: "55" + lead.telefone,
+                      firstName: lead.nome,
+                      externalId: lead.id,
+                      ...getFbCookies(),
+                      ...params,
+                    },
+                  }).catch(() => {});
+                }}
+                className="flex w-full items-center justify-center gap-2.5 rounded-[14px] bg-wine px-5 py-[16px] text-[16px] font-bold text-primary-foreground transition-colors hover:bg-wine-deep"
               >
-                CONTINUAR NO WHATSAPP
-                <ArrowRight
-                  size={13}
-                  strokeWidth={2.5}
-                  className="transition-transform duration-200 group-hover:translate-x-0.5"
-                />
+                <WhatsAppIcon />
+                Continuar no WhatsApp
               </a>
             </div>
           )}
         </div>
-
-        {/* ── Rodapé ── */}
-        {step < 4 && (
-          <div className="shrink-0 border-t border-sand/50 px-6 py-3 text-center">
-            <p className="text-[9px] tracking-widest text-foreground/30 uppercase">
-              Dra. Térsia Guimarães · CRM-CE 13957 · Sobral — CE
-            </p>
-          </div>
-        )}
       </div>
     </div>
   );
@@ -348,48 +319,43 @@ export function QualificationFlow({ onClose }: { onClose: () => void }) {
 
 /* ── Subcomponentes ──────────────────────────── */
 
+const campo =
+  "w-full rounded-[14px] border border-sand bg-card px-4 py-4 text-[17px] text-foreground outline-none transition-colors placeholder:text-foreground/40 focus:border-wine";
+
 function Seção({
-  eyebrow,
   title,
   subtitle,
   children,
 }: {
-  eyebrow: string;
   title: string;
   subtitle?: string;
   children: React.ReactNode;
 }) {
   return (
     <div>
-      <p className="eyebrow text-wine">{eyebrow}</p>
-      <h2 className="mt-3 font-display text-2xl font-bold leading-snug text-foreground sm:text-[1.75rem]">
+      <h2 className="font-display text-[26px] font-normal leading-[1.18] tracking-[-0.015em] text-wine-deep">
         {title}
       </h2>
       {subtitle && (
-        <p className="mt-2 text-[13px] leading-relaxed text-foreground/55">{subtitle}</p>
+        <p className="mt-2 text-[14.5px] leading-[1.55] text-foreground/60">{subtitle}</p>
       )}
-      {children}
+      <div className="mt-[22px]">{children}</div>
     </div>
   );
 }
 
-function BotãoPrimário({
-  children,
-  disabled,
-  onClick,
-}: {
-  children: React.ReactNode;
-  disabled?: boolean;
-  onClick: () => void;
-}) {
+function Nav({ children }: { children: React.ReactNode }) {
+  return <div className="mt-[22px] flex gap-2.5">{children}</div>;
+}
+
+function BotãoPrimário({ disabled, onClick }: { disabled?: boolean; onClick: () => void }) {
   return (
     <button
       onClick={onClick}
       disabled={disabled}
-      className="mt-8 flex w-full items-center justify-center gap-2 bg-wine px-6 py-4 font-display text-[11px] font-bold tracking-[0.16em] text-primary-foreground transition-all duration-200 hover:bg-wine-deep disabled:cursor-not-allowed disabled:opacity-25"
+      className="flex-1 rounded-[14px] bg-wine px-[18px] py-[15px] text-[16px] font-bold text-primary-foreground transition-colors hover:bg-wine-deep disabled:cursor-not-allowed disabled:opacity-40"
     >
-      {children}
-      <ArrowRight size={13} strokeWidth={2.5} />
+      Continuar
     </button>
   );
 }
@@ -398,61 +364,41 @@ function BotãoVoltar({ onClick }: { onClick: () => void }) {
   return (
     <button
       onClick={onClick}
-      className="mt-5 flex items-center gap-1.5 text-[11px] font-medium tracking-wide text-foreground/40 transition-colors hover:text-foreground/70"
+      className="rounded-[14px] border border-sand px-[18px] py-[15px] text-[16px] font-semibold text-wine-deep transition-colors hover:border-wine-deep"
     >
-      <ArrowLeft size={12} strokeWidth={2.5} />
       Voltar
     </button>
   );
 }
 
-function CartãoOpção({
+function Opção({
   label,
-  description,
   selected,
   onClick,
 }: {
   label: string;
-  description?: string;
-  selected?: boolean;
+  selected: boolean;
   onClick: () => void;
 }) {
   return (
     <button
       onClick={onClick}
-      className={`w-full border-l-2 px-4 py-3.5 text-left transition-all duration-150 ${
-        selected
-          ? "border-l-wine bg-wine/[0.04]"
-          : "border-l-transparent bg-card hover:border-l-wine/40 hover:bg-cream/70"
-      }`}
-      style={{ borderRight: "1px solid", borderTop: "1px solid", borderBottom: "1px solid",
-        borderRightColor: selected ? "oklch(0.446 0.135 26 / 0.25)" : "oklch(0.851 0.021 55 / 0.8)",
-        borderTopColor: selected ? "oklch(0.446 0.135 26 / 0.25)" : "oklch(0.851 0.021 55 / 0.8)",
-        borderBottomColor: selected ? "oklch(0.446 0.135 26 / 0.25)" : "oklch(0.851 0.021 55 / 0.8)",
-      }}
+      className={
+        "w-full rounded-[14px] border px-4 py-4 text-left text-[15.5px] font-semibold transition-colors " +
+        (selected
+          ? "border-wine bg-wine/5 text-wine-deep shadow-[inset_0_0_0_1px_var(--wine)]"
+          : "border-sand bg-card text-foreground hover:border-wine-deep")
+      }
     >
-      <div className="flex items-center justify-between gap-3">
-        <div className="min-w-0">
-          <span
-            className="block text-[0.875rem] font-semibold leading-snug"
-            style={{ color: selected ? "oklch(0.309 0.062 22)" : "oklch(0.215 0.008 50)" }}
-          >
-            {label}
-          </span>
-          {description && (
-            <span className="mt-0.5 block text-[11px] leading-snug text-foreground/45">
-              {description}
-            </span>
-          )}
-        </div>
-        {/* marcador lateral */}
-        <div
-          className="h-2 w-2 shrink-0 transition-colors duration-150"
-          style={{
-            background: selected ? "oklch(0.446 0.135 26)" : "oklch(0.851 0.021 55)",
-          }}
-        />
-      </div>
+      {label}
     </button>
+  );
+}
+
+function WhatsAppIcon() {
+  return (
+    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
+      <path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 1.8a8.2 8.2 0 1 1-4.2 15.3l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 0 1 12 3.8zm-3 4.4c-.2 0-.5.1-.7.3-.3.3-1 1-1 2.4s1 2.8 1.2 3c.1.2 2 3.1 4.9 4.2 2.4.9 2.9.8 3.4.7.5-.1 1.7-.7 1.9-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.6-.3l-2-1c-.3-.1-.5-.1-.7.1l-.9 1.1c-.2.2-.3.2-.6.1-.3-.2-1.2-.4-2.3-1.4-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.4.1-.6l.4-.5.3-.5c.1-.2 0-.4 0-.5L9.8 8.6c-.2-.4-.4-.4-.6-.4H9z" />
+    </svg>
   );
 }

@@ -14,7 +14,7 @@ export function ExitIntentBanner({ onSchedule, onDismiss }: ExitIntentBannerProp
     >
       {/* Banner */}
       <div
-        className="animate-fade-up relative w-full max-w-lg bg-background"
+        className="animate-fade-up relative w-full max-w-[460px] overflow-hidden rounded-t-[26px] bg-card sm:rounded-[22px]"
         style={{
           boxShadow: "0 -8px 60px -10px oklch(0.309 0.062 22 / 0.45)",
         }}
@@ -33,13 +33,13 @@ export function ExitIntentBanner({ onSchedule, onDismiss }: ExitIntentBannerProp
 
         <div className="px-7 py-8 sm:px-10">
           {/* Ícone */}
-          <div className="mb-5 flex h-11 w-11 items-center justify-center border border-wine/25 bg-cream/70">
+          <div className="mb-5 flex h-11 w-11 items-center justify-center rounded-full border border-wine/25 bg-cream/70">
             <Clock size={20} strokeWidth={1.5} className="text-wine" />
           </div>
 
           {/* Headline */}
           <p className="eyebrow text-wine">Antes de ir...</p>
-          <h2 className="mt-2 font-display text-xl font-bold leading-snug text-wine-deep sm:text-2xl">
+          <h2 className="mt-2 font-display text-[24px] font-normal leading-[1.18] text-wine-deep">
             Vai deixar sua saúde<br />
             para depois?
           </h2>
@@ -57,7 +57,7 @@ export function ExitIntentBanner({ onSchedule, onDismiss }: ExitIntentBannerProp
           <div className="flex flex-col gap-2.5 sm:flex-row sm:items-center">
             <button
               onClick={onSchedule}
-              className="group flex flex-1 items-center justify-center gap-2 bg-wine px-6 py-4 font-display text-[11px] font-bold tracking-[0.15em] text-primary-foreground transition-all duration-200 hover:bg-wine-deep"
+              className="group flex flex-1 items-center justify-center gap-2 rounded-[14px] bg-wine px-6 py-4 text-[15px] font-bold text-primary-foreground transition-all duration-200 hover:bg-wine-deep"
             >
               AGENDAR AGORA
               <ArrowRight

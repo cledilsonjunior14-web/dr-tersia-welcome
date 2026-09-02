@@ -19,7 +19,7 @@
  */
 
 @theme inline {
-  --font-display: "Sora", system-ui, sans-serif;
+  --font-display: "Fraunces", Georgia, "Times New Roman", serif;
   --font-sans: "Manrope", system-ui, sans-serif;
   --color-wine: var(--wine);
   --color-wine-deep: var(--wine-deep);
@@ -72,7 +72,7 @@
 }
 
 :root {
-  --radius: 0.25rem;
+  --radius: 0.875rem;
   --wine: oklch(0.446 0.135 26);
   --wine-deep: oklch(0.309 0.062 22);
   --sand: oklch(0.851 0.021 55);
