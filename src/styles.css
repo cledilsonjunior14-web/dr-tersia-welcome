@@ -67,6 +67,8 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+
+  --animate-fade-up: fade-up 0.7s ease forwards;
 }
 
 :root {
@@ -75,12 +77,13 @@
   --wine-deep: oklch(0.309 0.062 22);
   --sand: oklch(0.851 0.021 55);
   --cream: oklch(0.995 0.003 90);
-  --background: oklch(0.949 0.012 60);
-  --foreground: oklch(0.235 0.006 60);
-  --card: oklch(0.995 0.003 90);
-  --card-foreground: oklch(0.235 0.006 60);
+  /* off-white quente levemente mais rico */
+  --background: oklch(0.960 0.010 58);
+  --foreground: oklch(0.215 0.008 50);
+  --card: oklch(0.985 0.005 75);
+  --card-foreground: oklch(0.215 0.008 50);
   --popover: oklch(0.975 0.008 65);
-  --popover-foreground: oklch(0.235 0.006 60);
+  --popover-foreground: oklch(0.215 0.008 50);
   --primary: oklch(0.446 0.135 26);
   --primary-foreground: oklch(0.995 0.003 90);
   --secondary: oklch(0.851 0.021 55);
@@ -108,7 +111,6 @@
   --sidebar-border: oklch(0.929 0.013 255.508);
   --sidebar-ring: oklch(0.704 0.04 256.788);
 }
-
 
 .dark {
   --background: oklch(0.129 0.042 264.695);
@@ -175,3 +177,41 @@
   letter-spacing: 0.22em;
   text-transform: uppercase;
 }
+
+/* ─── Animações de entrada ─── */
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.animate-fade-up {
+  opacity: 0;
+  animation: fade-up 0.75s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.animate-fade-in {
+  opacity: 0;
+  animation: fade-in 0.9s ease forwards;
+}
+
+/* delays escalonados */
+.delay-100 { animation-delay: 0.10s; }
+.delay-200 { animation-delay: 0.20s; }
+.delay-300 { animation-delay: 0.30s; }
+.delay-400 { animation-delay: 0.40s; }
+.delay-500 { animation-delay: 0.50s; }
+.delay-600 { animation-delay: 0.60s; }
+.delay-700 { animation-delay: 0.70s; }
+.delay-800 { animation-delay: 0.80s; }
