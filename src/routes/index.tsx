@@ -36,37 +36,44 @@ function Index() {
 
   return (
     <main className="min-h-screen bg-background md:grid md:place-items-center">
-      <div className="mx-auto flex min-h-screen w-full max-w-[460px] flex-col px-[22px] pb-7 pt-6 md:min-h-0 md:py-10">
+      <div className="mx-auto flex min-h-screen w-full max-w-[460px] flex-col px-[22px] pb-7 pt-8 md:min-h-0 md:py-10">
         {/* ── Identificação ── */}
-        <header className="animate-fade-up delay-100">
-          <p className="text-[12px] font-bold uppercase tracking-[0.16em] text-wine">
+        <header className="animate-fade-up delay-100 flex flex-col items-center pt-2 text-center">
+          <div className="relative">
+            <div className="absolute -inset-[5px] rounded-full border border-wine/35" />
+            <div className="relative h-[132px] w-[132px] overflow-hidden rounded-full border-[3px] border-background bg-muted">
+              <img
+                src={retrato}
+                alt="Dra. Térsia Guimarães, ginecologista e obstetra em Sobral"
+                className="h-full w-full object-cover"
+                style={{ objectPosition: "50% 0%", transform: "scale(1.75)", transformOrigin: "50% 18%" }}
+              />
+            </div>
+          </div>
+
+          <h2 className="mt-5 font-display text-[26px] font-normal leading-none tracking-[-0.01em] text-wine-deep">
             Dra. Térsia Guimarães
+          </h2>
+          <p className="mt-3 text-[12px] font-bold uppercase tracking-[0.14em] text-wine">
+            Ginecologia • Obstetrícia • Medicina Fetal
           </p>
-          <p className="mt-1 text-[12px] tracking-[0.04em] text-foreground/60">
-            Ginecologia • Obstetrícia • Saúde íntima
+          <p className="mt-1.5 text-[12.5px] tracking-[0.02em] text-foreground/70">
+            Estética Íntima&nbsp;|&nbsp;Ninfoplastia • Laser Íntimo
+          </p>
+          <p className="mt-2 text-[11px] tracking-[0.04em] text-foreground/45">
+            CRM-CE 13957&nbsp;|&nbsp;RQE 12129&nbsp;|&nbsp;RQE 8882
           </p>
         </header>
-
-        {/* ── Retrato ── */}
-        <figure className="animate-fade-up delay-200 relative mt-[18px] h-[min(46vh,440px)] min-h-[300px] overflow-hidden rounded-[22px] bg-muted md:h-[400px]">
-          <img
-            src={retrato}
-            alt="Dra. Térsia Guimarães, ginecologista e obstetra em Sobral"
-            className="h-full w-full object-cover"
-            style={{ objectPosition: "50% 18%" }}
-          />
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-foreground/10" />
-        </figure>
 
         {/* ── Chamada ── */}
         <div className="animate-fade-up delay-300">
           <h1
-            className="mt-[26px] font-display text-[clamp(28px,7.6vw,34px)] font-normal leading-[1.12] tracking-[-0.02em] text-wine-deep"
+            className="mt-8 text-center font-display text-[clamp(26px,7vw,30px)] font-normal leading-[1.15] tracking-[-0.02em] text-wine-deep"
             style={{ fontVariationSettings: '"opsz" 72' }}
           >
             Sua saúde merece uma <em className="font-light italic">avaliação individual.</em>
           </h1>
-          <p className="mt-2.5 text-[15px] leading-[1.55] text-foreground/60">
+          <p className="mt-2.5 text-center text-[15px] leading-[1.55] text-foreground/60">
             Cuidar de você começa entendendo o que você precisa.
           </p>
         </div>
@@ -94,10 +101,6 @@ function Index() {
 
         {/* ── Rodapé ── */}
         <footer className="animate-fade-up delay-500 mt-[22px] border-t border-sand pt-4 text-center text-[11.5px] leading-[1.7] text-foreground/60">
-          <span className="font-semibold text-wine-deep">
-            Ginecologia • Obstetrícia • Medicina Fetal • Saúde Íntima
-          </span>
-          <br />
           Atendimento particular em Sobral — CE
         </footer>
       </div>

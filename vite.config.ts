@@ -11,6 +11,8 @@ export const BASE_PATH = "/dratercialink";
 
 export default defineConfig({
   vite: { base: `${BASE_PATH}/` },
+  // O tipo do wrapper da Lovable não declara baseURL, mas o nitro aceita e usa.
+  // @ts-expect-error opção repassada ao nitro
   nitro: { baseURL: `${BASE_PATH}/` },
   tanstackStart: {
     // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
