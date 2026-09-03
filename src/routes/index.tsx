@@ -108,10 +108,6 @@ function Index() {
           </p>
         </div>
 
-        {/* ── Rodapé ── */}
-        <footer className="animate-fade-up delay-500 mt-[22px] border-t border-sand pt-4 text-center text-[11.5px] leading-[1.7] text-foreground/60">
-          © 2026 Dra. Térsia Guimarães
-        </footer>
       </div>
 
       {open && <QualificationFlow onClose={() => setOpen(false)} />}
